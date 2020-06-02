@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм» [![Build status][travis-image]][travis-url]
 
 * Студент: [Кирилл Ерзылев](https://up.htmlacademy.ru/javascript/20/user/997865).
-* Наставник: `Неизвестно`.
+* Наставник: [Василий Подоплелов](https://htmlacademy.ru/profile/id348441)
 
 ---
 
