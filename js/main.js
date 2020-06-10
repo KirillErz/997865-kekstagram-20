@@ -69,11 +69,11 @@ commentCount.classList.add('hidden');
 commentsLoader.classList.add('hidden');
 
 for (var i = 0; i < picturesMoc[0].comments.length; i++) {
-  var element = commentTemplate.content.cloneNode(true);
-  element.querySelector('.social__picture').src = picturesMoc[0].comments[i].avatar;
-  element.querySelector('.social__picture').alt = picturesMoc[0].comments[i].name;
-  element.querySelector('.social__text').textContent = picturesMoc[0].comments[i].message;
-  commentFragment.append(element);
+  var elementComment = commentTemplate.content.cloneNode(true);
+  elementComment.querySelector('.social__picture').src = picturesMoc[0].comments[i].avatar;
+  elementComment.querySelector('.social__picture').alt = picturesMoc[0].comments[i].name;
+  elementComment.querySelector('.social__text').textContent = picturesMoc[0].comments[i].message;
+  commentFragment.append(elementComment);
 }
 comments.append(commentFragment);
 
