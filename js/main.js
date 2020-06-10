@@ -14,8 +14,8 @@ var createMocKekstagram = function (quantityObj) {
 
   for (var i = 0; i < randomInteger(1, 25); i++) {
 
-    var randomNames = randomInteger(1, 8);
-    var randomMessage = randomInteger(1, 6);
+    var randomNames = randomInteger(0, 7);
+    var randomMessage = randomInteger(0, 5);
 
     arrayOfComments.push({
       avatar: 'img/avatar-' + randomInteger(1, 6) + '.svg',
@@ -49,3 +49,31 @@ for (var i = 0; i < picturesMoc.length; i++) {
 
 var pictures = document.querySelector('.pictures');
 pictures.append(fragment);
+
+var bigPicture = document.querySelector('.big-picture');
+bigPicture.classList.remove('hidden');
+bigPicture.querySelector('.big-picture__img').querySelector('img').src = picturesMoc[0].url;
+bigPicture.querySelector('.likes-count').textContent = picturesMoc[0].likes;
+bigPicture.querySelector('.comments-count').textContent = picturesMoc[0].comments.length;
+document.querySelector('.social__caption').textContent = picturesMoc[0].description;
+
+var comments = document.querySelector('.social__comments');
+var commentTemplate = document.querySelector('#comment');
+var commentFragment = document.createDocumentFragment();
+
+var commentCount = document.querySelector('.social__comment-count');
+var commentsLoader = document.querySelector('.comments-loader');
+var body = document.querySelector('body');
+body.classList.add('modal-open');
+commentCount.classList.add('hidden');
+commentsLoader.classList.add('hidden');
+
+for (var i = 0; i < picturesMoc[0].comments.length; i++) {
+  var element = commentTemplate.content.cloneNode(true);
+  element.querySelector('.social__picture').src = picturesMoc[0].comments[i].avatar;
+  element.querySelector('.social__picture').alt = picturesMoc[0].comments[i].name;
+  element.querySelector('.social__text').textContent = picturesMoc[0].comments[i].message;
+  commentFragment.append(element);
+}
+comments.append(commentFragment);
+
