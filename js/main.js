@@ -1,4 +1,6 @@
 'use strict';
+var body = document.querySelector('body');
+
 var randomInteger = function (min, max) {
   var random = min + Math.random() * (max + 1 - min);
   return Math.floor(random);
@@ -61,9 +63,8 @@ document.querySelector('.social__caption').textContent = picturesMoc[0].descript
 
 var commentCount = document.querySelector('.social__comment-count');
 var commentsLoader = document.querySelector('.comments-loader');
-var body = document.querySelector('body');
 
-body.classList.add('modal-open');
+
 commentCount.classList.add('hidden');
 commentsLoader.classList.add('hidden');
 
@@ -71,14 +72,34 @@ var comments = document.querySelector('.social__comments');
 var commentTemplate = document.querySelector('#comment');
 var commentFragment = document.createDocumentFragment();
 
-for (var i = 0; i < picturesMoc[0].comments.length; i++) {
+for (var j = 0; j < picturesMoc[0].comments.length; j++) {
   var elementComment = commentTemplate.content.cloneNode(true);
 
-  elementComment.querySelector('.social__picture').src = picturesMoc[0].comments[i].avatar;
-  elementComment.querySelector('.social__picture').alt = picturesMoc[0].comments[i].name;
-  elementComment.querySelector('.social__text').textContent = picturesMoc[0].comments[i].message;
+  elementComment.querySelector('.social__picture').src = picturesMoc[0].comments[j].avatar;
+  elementComment.querySelector('.social__picture').alt = picturesMoc[0].comments[j].name;
+  elementComment.querySelector('.social__text').textContent = picturesMoc[0].comments[j].message;
   commentFragment.append(elementComment);
 
 }
 comments.append(commentFragment);
 
+
+var bigPictureCancel = document.querySelector('.big-picture__cancel');
+
+bigPictureCancel.addEventListener('click', function () {
+  bigPicture.classList.add('hidden');
+});
+
+document.addEventListener('keydown', function (evt) {
+  if (evt.keyCode === 27) {
+    bigPicture.classList.add('hidden');
+  }
+});
+
+var editFormImg = document.querySelector('.img-upload__overlay');
+var uploadFile = document.querySelector('#upload-file');
+
+uploadFile.addEventListener('change', function () {
+  editFormImg.classList.remove('hidden');
+  body.classList.add('modal-open');
+});
