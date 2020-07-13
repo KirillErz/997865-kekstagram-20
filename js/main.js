@@ -55,12 +55,6 @@ pictures.append(fragment);
 
 var bigPicture = document.querySelector('.big-picture');
 
-bigPicture.classList.remove('hidden');
-bigPicture.querySelector('.big-picture__img img').src = picturesMoc[0].url;
-bigPicture.querySelector('.likes-count').textContent = picturesMoc[0].likes;
-bigPicture.querySelector('.comments-count').textContent = picturesMoc[0].comments.length;
-document.querySelector('.social__caption').textContent = picturesMoc[0].description;
-
 var commentCount = document.querySelector('.social__comment-count');
 var commentsLoader = document.querySelector('.comments-loader');
 
@@ -103,3 +97,19 @@ uploadFile.addEventListener('change', function () {
   editFormImg.classList.remove('hidden');
   body.classList.add('modal-open');
 });
+
+var showBigPicture = function (img, iterator) {
+
+  img.addEventListener('click', function () {
+    bigPicture.classList.remove('hidden');
+    bigPicture.querySelector('.big-picture__img img').src = picturesMoc[iterator].url;
+    bigPicture.querySelector('.likes-count').textContent = picturesMoc[iterator].likes;
+    bigPicture.querySelector('.comments-count').textContent = picturesMoc[iterator].comments.length;
+    document.querySelector('.social__caption').textContent = picturesMoc[iterator].description;
+  });
+};
+
+var listPictures = document.querySelectorAll('.picture');
+for (var g = 0; g < listPictures.length; g++) {
+  showBigPicture(listPictures[g], g);
+}
