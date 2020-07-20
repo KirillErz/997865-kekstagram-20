@@ -4,16 +4,22 @@ var body = document.querySelector('body');
 var createMocKekstagram = window.data.createMocKekstagram;
 var drawBigPicture = window.preview.drawBigPicture;
 var drawMiniaturePictures = window.picture.drawMiniaturePictures;
+var load = window.serverInteraction.load;
+
 
 var editFormImg = document.querySelector('.img-upload__overlay');
 var uploadFile = document.querySelector('#upload-file');
 
-var picturesMoc = createMocKekstagram(25);
+var onError = function (message) {
+  console.error(message);
+};
 
-drawMiniaturePictures(picturesMoc);
+load('https://javascript.pages.academy/kekstagram/data', function (response) {
 
-drawBigPicture(picturesMoc);
+  drawMiniaturePictures(response);
+  drawBigPicture(response);
 
+}, onError)
 
 uploadFile.addEventListener('change', function () {
   editFormImg.classList.remove('hidden');
