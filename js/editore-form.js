@@ -1,6 +1,8 @@
 'use strict';
 (function () {
 
+  var sendForm = window.serverInteraction.sendForm;
+
   var SCALE_STEP = 25;
   var SACALE_DEFAULT = 100;
   var FLAG_FOCUS = true;
@@ -14,6 +16,7 @@
   var imgDownloaded = document.querySelector('.img-upload__preview');
   var imgEffects = document.querySelectorAll('.effects__radio');
   var imgEffectsLevel = document.querySelector('.img-upload__effect-level');
+  var main = document.querySelector('main');
 
   var pin = document.querySelector('.effect-level__pin');
   var effectlevelLine = document.querySelector('.effect-level__line');
@@ -23,7 +26,14 @@
   var hashtag = document.querySelector('.text__hashtags');
   var comment = document.querySelector('.text__description');
 
-  var publicForm = document.querySelector('.img-upload__submit');
+  var publicForm = document.querySelector('.img-upload__form');
+
+  var successTemplate = document.querySelector('#success');
+  var elementSuccess = successTemplate.content.cloneNode(true);
+  var success = elementSuccess.querySelector('.success')
+  var successButton = elementSuccess.querySelector('.success__button')
+
+
 
   scaleValue.value = SACALE_DEFAULT + '%';
   var stepsCount = SACALE_DEFAULT;
@@ -111,6 +121,7 @@
 
   var setLevelEffect = function (level) {
     effectlevelValue.value = level;
+    effectlevelValue.defaultValue = level;
     if (imgDownloaded.classList.contains('effects__preview--none')) {
       effectlevelValue.value = 0;
     } else if (imgDownloaded.classList.contains('effects__preview--chrome')) {
@@ -185,19 +196,39 @@
     dragging(event);
   });
 
-  var charMatch = new RegExp('^#[а-яА-Яa-zA-Z_0-9]+$');
+  var sendEditedPicture = function (data, evt) {
+    evt.preventDefault();
+    sendForm(data, function (response) {
+      if (response.readyState === 4){
+        editFormImg.classList.add('hidden');
+        main.append(elementSuccess);
+      } else {
 
-  hashtag.addEventListener('input', function () {
+      }
 
-    // if (charMatch.test(evt.target.value)) {
-    //   console.log(evt.target.value);
-    // }
-    // if (evt.target.value[0] != '#'){
-    //   //alert('первый символ долден быть #')
-    // }
+    });
+  };
+
+  successButton.addEventListener('click', function () {
+
+    success.classList.add('hidden');
   });
 
-  publicForm.addEventListener('click', function () {
+  successButton.addEventListener('keydown', function (evt) {
+    if (evt.keyCode === 27) {
+      success.classList.add('hidden');
+    }
+  });
+
+  document.addEventListener('click', function () {
+    success.classList.add('hidden');
+  });
+
+  var charMatch = new RegExp('^#[а-яА-Яa-zA-Z_0-9]+$');
+
+
+
+  publicForm.addEventListener('submit', function (evt) {
     var strHashtag = hashtag.value.toLowerCase();
 
     if (strHashtag[0] === '#' && strHashtag.length > 1 || strHashtag === '') {
@@ -213,14 +244,21 @@
         }
         if (arrHashtag.length > 5) {
           hashtag.setCustomValidity('нельзя указать больше пяти хэш-тегов');
+        } else {
+          sendEditedPicture(publicForm, evt);
+          hashtag.setCustomValidity('');
         }
       } else {
+        sendEditedPicture(publicForm, evt);
         hashtag.setCustomValidity('');
       }
     } else {
       hashtag.setCustomValidity('Неверный формат ввода');
     }
+
   });
+
+
 
   comment.addEventListener('focusin', function (evt) {
     FLAG_FOCUS = !evt;
@@ -242,7 +280,6 @@
   for (var i = 0; i < imgEffects.length; i++) {
     setEffect(imgEffects[i]);
   }
-
 
   window.form = {
 
