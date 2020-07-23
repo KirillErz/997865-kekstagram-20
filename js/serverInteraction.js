@@ -30,7 +30,7 @@
 
   };
 
-  var sendForm = function (data, onSuccess) {
+  var sendForm = function (data, onSuccess, onError) {
 
     var url = 'https://javascript.pages.academy/kekstagram';
 
