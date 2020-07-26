@@ -42,15 +42,18 @@
         onSuccess(xhr);
       } else {
         onError('Cтатус ответа: ' + xhr.status + ' ' + xhr.statusText);
+        console.log('Cтатус ответа: ' + xhr.status + ' ' + xhr.statusText);
       }
     });
 
     xhr.addEventListener('error', function () {
       onError('Произошла ошибка соединения');
+      console.log('Произошла ошибка соединения');
     });
 
     xhr.addEventListener('timeout', function () {
       onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
+      console.log('Запрос не успел выполниться за');
     });
 
     xhr.timeout = 10000; // 10s

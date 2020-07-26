@@ -5,6 +5,7 @@ var body = document.querySelector('body');
 var drawBigPicture = window.preview.drawBigPicture;
 var drawMiniaturePictures = window.picture.drawMiniaturePictures;
 var load = window.serverInteraction.load;
+var form = window.form;
 
 
 var editFormImg = document.querySelector('.img-upload__overlay');
@@ -22,7 +23,16 @@ load('https://javascript.pages.academy/kekstagram/data', function (response) {
 
 }, onError);
 
+var path = ''
 uploadFile.addEventListener('change', function () {
+  // if(path === '') {
+  //   path = uploadFile.value
+  // } else {
+  //   if (path.includes(uploadFile.value))
+  //     uploadFile.value = '';
+  // }
+  form.openEditingForm(uploadFile);
   editFormImg.classList.remove('hidden');
   body.classList.add('modal-open');
+  console.log(uploadFile.value);
 });
