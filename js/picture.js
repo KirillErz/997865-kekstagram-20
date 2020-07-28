@@ -1,5 +1,6 @@
 'use strict';
 (function () {
+
   var picture = document.querySelector('#picture');
 
   var pictures = document.querySelector('.pictures');

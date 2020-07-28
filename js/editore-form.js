@@ -31,15 +31,13 @@
 
   var successTemplate = document.querySelector('#success');
   var elementSuccess = successTemplate.content.cloneNode(true);
-  var success = elementSuccess.querySelector('.success')
-  var successButton = elementSuccess.querySelector('.success__button')
+  var success = elementSuccess.querySelector('.success');
+  var successButton = elementSuccess.querySelector('.success__button');
 
   var errorTemplate = document.querySelector('#error');
   var elementerror = errorTemplate.content.cloneNode(true);
-  var error = elementerror.querySelector('.error')
-  var errorButton = elementerror.querySelector('.error__button')
-
-
+  var error = elementerror.querySelector('.error');
+  var errorButton = elementerror.querySelector('.error__button');
 
   var stepsCount = 0;
 
@@ -77,7 +75,7 @@
 
   var setFilter = function (filterName, efect) {
     imgDownloaded.style.filter = efect;
-    if(filterName === 'none'){
+    if (filterName === 'none') {
       imgEffectsLevel.classList.add('hidden');
     } else {
       imgEffectsLevel.classList.remove('hidden');
@@ -111,22 +109,19 @@
     }
   };
 
-
-
-
   var effectContainer = function () {
     var previousEffect = 'none';
     imgEffectsLevel.classList.add('hidden');
 
     var additionEffect = function (evt) {
       var effectName = evt.target.value;
-        if (imgDownloaded.classList.contains('effects__preview--' + previousEffect)) {
-          imgDownloaded.classList.remove('effects__preview--' + previousEffect);
-        }
-        imgDownloaded.classList.add('effects__preview--' + effectName);
-        setDefaultFilter(effectName);
-        previousEffect = effectName;
-    }
+      if (imgDownloaded.classList.contains('effects__preview--' + previousEffect)) {
+        imgDownloaded.classList.remove('effects__preview--' + previousEffect);
+      }
+      imgDownloaded.classList.add('effects__preview--' + effectName);
+      setDefaultFilter(effectName);
+      previousEffect = effectName;
+    };
     return function (effect) {
       effect.addEventListener('click', additionEffect);
     };
@@ -224,15 +219,11 @@
     dragging(event);
   });
 
-
-
-
   var sendEditedPicture = function (data) {
     sendForm(data, onSuccess, onError);
   };
 
-  var onError = function (message) {
-    console.log(message);
+  var onError = function () {
     editFormImg.classList.add('hidden');
 
     if (main.querySelector('.error')) {
@@ -249,7 +240,7 @@
     if (response.readyState === 4) {
       editFormImg.classList.add('hidden');
 
-      if (main.querySelector('.success')){
+      if (main.querySelector('.success')) {
         success.classList.remove('hidden');
       } else {
         main.append(elementSuccess);
@@ -272,51 +263,44 @@
       }
     });
 
-    // document.addEventListener('click', function () {
-    //   PopUp.classList.add('hidden');
-    // });
-  }
-
+    document.addEventListener('click', function () {
+      PopUp.classList.add('hidden');
+    });
+  };
 
   var charMatch = new RegExp('^#[а-яА-Яa-zA-Z_0-9]+$');
 
   var formProcessing = function (evt) {
     evt.preventDefault();
-      var strHashtag = hashtag.value.toLowerCase();
-      if (strHashtag[0] === '#' && strHashtag.length > 1 || strHashtag === '') {
-        if (strHashtag !== '') {
-          var arrHashtag = strHashtag.split(' ');
-          for (var i = 0; i < arrHashtag.length; i++) {
-            if (arrHashtag[i][0] === '#' && charMatch.test(arrHashtag[i]) && arrHashtag[i].length <= 20) {
-              hashtag.setCustomValidity('');
-            } else {
-              hashtag.setCustomValidity('Неверный формат ввода');
-              return;
-            }
-          }
-          if (arrHashtag.length > 5) {
-            hashtag.setCustomValidity('нельзя указать больше пяти хэш-тегов');
-          } else {
-            sendEditedPicture(publicForm);
-            FILE.value = '';
+    var strHashtag = hashtag.value.toLowerCase();
+    if (strHashtag[0] === '#' && strHashtag.length > 1 || strHashtag === '') {
+      if (strHashtag !== '') {
+        var arrHashtag = strHashtag.split(' ');
+        for (var i = 0; i < arrHashtag.length; i++) {
+          if (arrHashtag[i][0] === '#' && charMatch.test(arrHashtag[i]) && arrHashtag[i].length <= 20) {
             hashtag.setCustomValidity('');
+          } else {
+            hashtag.setCustomValidity('Неверный формат ввода');
+            return;
           }
+        }
+        if (arrHashtag.length > 5) {
+          hashtag.setCustomValidity('нельзя указать больше пяти хэш-тегов');
         } else {
           sendEditedPicture(publicForm);
           FILE.value = '';
           hashtag.setCustomValidity('');
         }
       } else {
-        hashtag.setCustomValidity('Неверный формат ввода');
+        sendEditedPicture(publicForm);
+        FILE.value = '';
+        hashtag.setCustomValidity('');
       }
+    } else {
+      hashtag.setCustomValidity('Неверный формат ввода');
+    }
 
-  }
-
-
-
-
-
-
+  };
 
   comment.addEventListener('focusin', function (evt) {
     FLAG_FOCUS = !evt;
@@ -334,8 +318,8 @@
     FLAG_FOCUS = evt;
   });
 
-  var openEditingForm = function (uploadFile)  {
-    FILE = uploadFile
+  var openEditingForm = function (uploadFile) {
+    FILE = uploadFile;
     stepsCount = SACALE_DEFAULT;
     scaleValue.value = SACALE_DEFAULT + '%';
     imgEffects[0].checked = true;
@@ -345,7 +329,7 @@
       setEffect(imgEffects[i]);
     }
     publicForm.addEventListener('submit', formProcessing);
-  }
+  };
 
 
   window.form = {
