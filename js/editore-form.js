@@ -5,8 +5,10 @@
 
   var SCALE_STEP = 25;
   var SACALE_DEFAULT = 100;
-  var FLAG_FOCUS = true;
-  var FILE;
+  var KEY_CODE_ESC = 27;
+
+  var fileFocus = true;
+  var file;
 
   var body = document.querySelector('body');
   var editFormImg = document.querySelector('.img-upload__overlay');
@@ -67,7 +69,7 @@
   });
 
   document.addEventListener('keydown', function (evt) {
-    if (evt.keyCode === 27 && FLAG_FOCUS) {
+    if (evt.keyCode === KEY_CODE_ESC && fileFocus) {
       editFormImg.classList.add('hidden');
       clearForm();
     }
@@ -141,19 +143,25 @@
     } else if (imgDownloaded.classList.contains('effects__preview--phobos')) {
       imgDownloaded.style.filter = 'blur(' + (level * 3) / 100 + 'px' + ')';
     } else if (imgDownloaded.classList.contains('effects__preview--heat')) {
-      imgDownloaded.style.filter = 'brightness(' + (level * 3) / 100 + ')';
+      var number = Number(level);
+      if (number < 33) {
+        number = number + 33.3;
+      }
+      imgDownloaded.style.filter = 'brightness(' + (number * 3) / 100 + ')';
     }
   };
 
 
   var clearForm = function () {
+    Array.from(imgEffects).map(function (imgEffect) {
 
-    for (var i = 0; i < imgEffects.length; i++) {
-      if (imgDownloaded.classList.contains('effects__preview--' + imgEffects[i].value)) {
-        imgDownloaded.classList.remove('effects__preview--' + imgEffects[i].value);
-        imgEffects[i].checked = false;
+      if (imgDownloaded.classList.contains('effects__preview--' + imgEffect.value)) {
+        imgDownloaded.classList.remove('effects__preview--' + imgEffect.value);
+        imgEffect.checked = false;
       }
-    }
+
+    });
+
     setDefaultFilter('none');
     hashtag.value = '';
     comment.value = '';
@@ -233,7 +241,7 @@
     }
     closePopUp(error, errorButton);
     clearForm();
-    publicForm.removeEventListener('submit', formProcessing);
+    publicForm.removeEventListener('submit', validateForm);
   };
 
   var onSuccess = function (response) {
@@ -247,7 +255,7 @@
       }
       closePopUp(success, successButton);
       clearForm();
-      publicForm.removeEventListener('submit', formProcessing);
+      publicForm.removeEventListener('submit', validateForm);
     }
   };
 
@@ -257,8 +265,8 @@
       PopUp.classList.add('hidden');
     });
 
-    button.addEventListener('keydown', function (evt) {
-      if (evt.keyCode === 27) {
+    document.addEventListener('keydown', function (evt) {
+      if (evt.keyCode === KEY_CODE_ESC) {
         PopUp.classList.add('hidden');
       }
     });
@@ -270,7 +278,7 @@
 
   var charMatch = new RegExp('^#[а-яА-Яa-zA-Z_0-9]+$');
 
-  var formProcessing = function (evt) {
+  var validateForm = function (evt) {
     evt.preventDefault();
     var strHashtag = hashtag.value.toLowerCase();
     if (strHashtag[0] === '#' && strHashtag.length > 1 || strHashtag === '') {
@@ -288,12 +296,12 @@
           hashtag.setCustomValidity('нельзя указать больше пяти хэш-тегов');
         } else {
           sendEditedPicture(publicForm);
-          FILE.value = '';
+          file.value = '';
           hashtag.setCustomValidity('');
         }
       } else {
         sendEditedPicture(publicForm);
-        FILE.value = '';
+        file.value = '';
         hashtag.setCustomValidity('');
       }
     } else {
@@ -303,23 +311,23 @@
   };
 
   comment.addEventListener('focusin', function (evt) {
-    FLAG_FOCUS = !evt;
+    fileFocus = !evt;
   });
 
   comment.addEventListener('focusout', function (evt) {
-    FLAG_FOCUS = evt;
+    fileFocus = evt;
   });
 
   hashtag.addEventListener('focusin', function (evt) {
-    FLAG_FOCUS = !evt;
+    fileFocus = !evt;
   });
 
   hashtag.addEventListener('focusout', function (evt) {
-    FLAG_FOCUS = evt;
+    fileFocus = evt;
   });
 
-  var openEditingForm = function (uploadFile) {
-    FILE = uploadFile;
+  var openEditingImg = function (uploadFile) {
+    file = uploadFile;
     stepsCount = SACALE_DEFAULT;
     scaleValue.value = SACALE_DEFAULT + '%';
     imgEffects[0].checked = true;
@@ -328,12 +336,12 @@
     for (var i = 0; i < imgEffects.length; i++) {
       setEffect(imgEffects[i]);
     }
-    publicForm.addEventListener('submit', formProcessing);
+    publicForm.addEventListener('submit', validateForm);
   };
 
 
   window.form = {
-    openEditingForm: openEditingForm
+    openEditingImg: openEditingImg
   };
 
 })();

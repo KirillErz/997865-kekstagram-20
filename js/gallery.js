@@ -7,9 +7,9 @@
   var updatePictures = function (data) {
     var pictures = document.querySelectorAll('.picture');
 
-    for (var i = 0; i < pictures.length; i++) {
-      document.querySelector('.picture').remove();
-    }
+    Array.from(pictures).map(function (it) {
+      it.remove();
+    });
 
     drawMiniaturePictures(data);
     drawBigPicture(data);
