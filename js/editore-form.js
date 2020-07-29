@@ -35,9 +35,9 @@
   var successButton = elementSuccess.querySelector('.success__button');
 
   var errorTemplate = document.querySelector('#error');
-  var elementerror = errorTemplate.content.cloneNode(true);
-  var error = elementerror.querySelector('.error');
-  var errorButton = elementerror.querySelector('.error__button');
+  var elementError = errorTemplate.content.cloneNode(true);
+  var error = elementError.querySelector('.error');
+  var errorButton = elementError.querySelector('.error__button');
 
   var stepsCount = 0;
 
@@ -229,7 +229,7 @@
     if (main.querySelector('.error')) {
       error.classList.remove('hidden');
     } else {
-      main.append(elementerror);
+      main.append(elementError);
     }
     closePopUp(error, errorButton);
     clearForm();
