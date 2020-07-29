@@ -2,7 +2,6 @@
 (function () {
 
   var updatePictures = window.gallery.updatePictures;
-
   var pictures = [];
 
   var getDateFormApi = function (data) {
@@ -66,6 +65,7 @@
     callback(copy);
   };
 
+  var lastTimeout;
   var selectFilter = function (filter) {
     var picturesCopy = pictures.slice();
 
@@ -73,19 +73,34 @@
       case 'filter-default':
         removeImgFilter(filter, filterArr);
         setFilterDefault(picturesCopy, function (filteredData) {
-          updatePictures(filteredData);
+          if (lastTimeout) {
+            window.clearTimeout(lastTimeout);
+          }
+          lastTimeout = window.setTimeout(function () {
+            updatePictures(filteredData);
+          }, 300);
         });
         break;
       case 'filter-random':
         removeImgFilter(filter, filterArr);
         setFilterRandom(picturesCopy, function (filteredData) {
-          updatePictures(filteredData);
+          if (lastTimeout) {
+            window.clearTimeout(lastTimeout);
+          }
+          lastTimeout = window.setTimeout(function () {
+            updatePictures(filteredData);
+          }, 300);
         });
         break;
       case 'filter-discussed':
         removeImgFilter(filter, filterArr);
         setFilterDiscussed(picturesCopy, function (filteredData) {
-          updatePictures(filteredData);
+          if (lastTimeout) {
+            window.clearTimeout(lastTimeout);
+          }
+          lastTimeout = window.setTimeout(function () {
+            updatePictures(filteredData);
+          }, 300);
         });
         break;
     }

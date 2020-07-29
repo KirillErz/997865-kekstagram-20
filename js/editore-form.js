@@ -5,6 +5,8 @@
 
   var SCALE_STEP = 25;
   var SACALE_DEFAULT = 100;
+  var MAX_SCALE = 100;
+  var MIN_SCALE = 25;
   var KEY_CODE_ESC = 27;
 
   var fileFocus = true;
@@ -44,20 +46,20 @@
   var stepsCount = 0;
 
   var setScale = function (scale) {
-    var imgScale = scale / 100;
+    var imgScale = scale / MAX_SCALE;
     scaleValue.value = scale + '%';
     imgDownloaded.style.transform = 'scale(' + imgScale + ')';
   };
 
   scaleerButtonR.addEventListener('click', function () {
-    if (stepsCount < 100) {
+    if (stepsCount < MAX_SCALE) {
       stepsCount += SCALE_STEP;
       setScale(stepsCount);
     }
   });
 
   scaleerButtonL.addEventListener('click', function () {
-    if (stepsCount > 25) {
+    if (stepsCount > MIN_SCALE) {
       stepsCount -= SCALE_STEP;
       setScale(stepsCount);
     }
@@ -132,22 +134,23 @@
   var setLevelEffect = function (level) {
     effectlevelValue.value = level;
     effectlevelValue.defaultValue = level;
+    var maxLevel = 100;
+    var maxValueEffectHeat = 3;
+    var maxValueEffectPhobos = 3;
+    var minValueEffectHeat = 1;
     if (imgDownloaded.classList.contains('effects__preview--none')) {
       effectlevelValue.value = 0;
     } else if (imgDownloaded.classList.contains('effects__preview--chrome')) {
-      imgDownloaded.style.filter = 'grayscale(' + level / 100 + ')';
+      imgDownloaded.style.filter = 'grayscale(' + level / maxLevel + ')';
     } else if (imgDownloaded.classList.contains('effects__preview--sepia')) {
-      imgDownloaded.style.filter = 'sepia(' + level / 100 + ')';
+      imgDownloaded.style.filter = 'sepia(' + level / maxLevel + ')';
     } else if (imgDownloaded.classList.contains('effects__preview--marvin')) {
       imgDownloaded.style.filter = 'invert(' + level + '%' + ')';
     } else if (imgDownloaded.classList.contains('effects__preview--phobos')) {
-      imgDownloaded.style.filter = 'blur(' + (level * 3) / 100 + 'px' + ')';
+      imgDownloaded.style.filter = 'blur(' + (level * maxValueEffectPhobos) / maxLevel + 'px' + ')';
     } else if (imgDownloaded.classList.contains('effects__preview--heat')) {
-      var number = Number(level);
-      if (number < 33) {
-        number = number + 33.3;
-      }
-      imgDownloaded.style.filter = 'brightness(' + (number * 3) / 100 + ')';
+      level = (parseFloat(level) / maxLevel).toFixed(2) * (maxValueEffectHeat - minValueEffectHeat) + minValueEffectHeat;
+      imgDownloaded.style.filter = 'brightness(' + level + ')';
     }
   };
 
@@ -297,18 +300,22 @@
         } else {
           sendEditedPicture(publicForm);
           file.value = '';
-          hashtag.setCustomValidity('');
+          hashtag.checkValidity();
         }
       } else {
         sendEditedPicture(publicForm);
         file.value = '';
-        hashtag.setCustomValidity('');
+        hashtag.checkValidity();
       }
     } else {
       hashtag.setCustomValidity('Неверный формат ввода');
     }
 
   };
+
+  hashtag.addEventListener('input', function () {
+    hashtag.setCustomValidity('');
+  });
 
   comment.addEventListener('focusin', function (evt) {
     fileFocus = !evt;
