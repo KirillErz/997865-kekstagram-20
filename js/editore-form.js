@@ -244,7 +244,7 @@
     }
     closePopUp(error, errorButton);
     clearForm();
-    publicForm.removeEventListener('submit', validateForm);
+    onPublicFormSubmit.removeEventListener('submit', validateForm);
   };
 
   var onSuccess = function (response) {
@@ -258,7 +258,7 @@
       }
       closePopUp(success, successButton);
       clearForm();
-      publicForm.removeEventListener('submit', validateForm);
+      onPublicFormSubmit.removeEventListener('submit', validateForm);
     }
   };
 
@@ -298,12 +298,12 @@
         if (arrHashtag.length > 5) {
           hashtag.setCustomValidity('нельзя указать больше пяти хэш-тегов');
         } else {
-          sendEditedPicture(publicForm);
+          sendEditedPicture(onPublicFormSubmit);
           file.value = '';
           hashtag.checkValidity();
         }
       } else {
-        sendEditedPicture(publicForm);
+        sendEditedPicture(onPublicFormSubmit);
         file.value = '';
         hashtag.checkValidity();
       }
@@ -343,7 +343,7 @@
     for (var i = 0; i < imgEffects.length; i++) {
       setEffect(imgEffects[i]);
     }
-    publicForm.addEventListener('submit', validateForm);
+    onPublicFormSubmit.addEventListener('submit', validateForm);
   };
 
 
